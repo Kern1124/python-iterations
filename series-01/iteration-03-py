@@ -1,3 +1,8 @@
+ACE, JACK, QUEEN, KING = 1, 11, 12, 13
+HEARTS, DIAMONDS, CLUBS, SPADES = 0, 1, 2, 3
+RED = -1
+BLACK = -2
+
 def is_in(element, list_array):
 
     if element is None:
