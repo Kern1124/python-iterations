@@ -1,0 +1,101 @@
+def is_in(element, list_array):
+
+    if element is None:
+
+        for thing in list_array:
+
+            if thing is element:
+                return True
+
+    else:
+
+        for thing in list_array:
+
+            if thing is not None:
+                num, _ = thing
+
+                if element == num:
+                    return True
+
+    return False
+
+
+def colour(suit):
+
+    return RED if (suit == HEARTS or suit == DIAMONDS) else BLACK
+
+
+def scroll_through(list1, foundation, is_foundation_cascades):
+
+    for card in list1:
+
+        if card is not None:
+
+            num, suit = card
+
+        else:
+            continue
+
+        for card_foundation in foundation:
+
+            if card_foundation is not None:
+
+                num_f, suit_f = card_foundation
+
+                if not is_foundation_cascades and num == num_f + 1 \
+                   and suit == suit_f:
+                    return True
+
+                elif is_foundation_cascades and num + 1 == num_f \
+                        and colour(suit) != colour(suit_f):
+                    return True
+
+            else:
+                continue
+
+    return False
+
+
+def is_not_empty(list_array):
+
+    for element in list_array:
+
+        if element is not None:
+            return True
+
+    return False
+
+
+def can_move(cascades, cells, foundation):
+
+    if (is_in(None, cascades) or is_in(None, cells)) and \
+           (is_not_empty(cells) or is_not_empty(cascades)):
+        return True
+
+    if is_in(None, foundation) and (is_in(ACE, cascades) or is_in(ACE, cells)):
+        return True
+
+    if scroll_through(cells, foundation, False) or \
+       scroll_through(cascades, foundation, False) or \
+       scroll_through(cells, cascades, True) or \
+       scroll_through(cascades, cascades, True):
+        return True
+
+    return False
+
+
+def main():
+    cascades = [(2, HEARTS), (3, HEARTS), (7, CLUBS), (8, CLUBS)]
+    cells = [(2, CLUBS), (3, CLUBS), (4, CLUBS)]
+    foundations = [None, None, None, None]
+    assert can_move(cascades, cells, foundations)
+
+    cells = [(2, DIAMONDS), (3, DIAMONDS), (4, DIAMONDS)]
+    assert not can_move(cascades, cells, foundations)
+
+    cells = [(2, DIAMONDS), (4, SPADES), (3, HEARTS)]
+    assert not can_move(cascades, cells, foundations)
+
+
+if __name__ == '__main__':
+    main()
